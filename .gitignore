@@ -1,0 +1,4 @@
+configs/*
+__pychcache__/*
+*/__pychcache__
+*.pdf

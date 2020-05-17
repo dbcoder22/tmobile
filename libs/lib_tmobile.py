@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append("./")
-from utils import _parse_to_num
+from utilities.utils import parse_to_num
 
 class TMobile(object):
     
@@ -29,7 +29,7 @@ class TMobile(object):
 
     def _get_account_total(self):
         content = self.data[4].split()
-        return _parse_to_num(content[-1])
+        return parse_to_num(content[-1])
     
     def _get_titles(self):
         return self.data[0].split()
