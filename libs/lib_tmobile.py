@@ -1,22 +1,35 @@
 #!/usr/bin/python
+"""
+Module pertaining to T-Mobile account details that are parsed from PDF provided by the user
+"""
+from tmobile.utilities.utils import parse_to_num
 
-import sys
-sys.path.append("./")
-from utilities.utils import parse_to_num
-
-class TMobile(object):
-    
+class TMobile():
+    """
+    Main class to perform get details pertaining to T-Mobile account
+    """
     def __init__(self, raw_data):
         self.raw_data = raw_data
         self.positions = self._get_start_end_positions()
         self.data = self._get_data()
         self.account_total = self._get_account_total()
-        self.titles = self._get_titles()
+        self.titles = self.get_titles()
 
     def _get_data(self):
+        """Private function to get required chunk of the data from the file
+
+        :return: Required data from the file
+        :rtype: (str)
+        """
         return self.raw_data[self.positions['start'] + 1:self.positions['end']]
-    
+
     def _get_start_end_positions(self):
+        """Function to parse the bill and get start & end
+           positions of required chunk of data from the file
+
+        :return: Start and End position of the chunk of data needed on the file
+        :rtype: (dict)
+        """
         start_pos = end_pos = 0
         for _, detail in enumerate(self.raw_data):
             if "SUMMARY" in detail:
@@ -28,20 +41,35 @@ class TMobile(object):
         return {'start' : start_pos, 'end' : end_pos}
 
     def _get_account_total(self):
+        """Private function to get total amount on the account
+
+        :return: Total amount on the account
+        :rtype: (int)
+        """
         content = self.data[4].split()
         return parse_to_num(content[-1])
-    
-    def _get_titles(self):
+
+    def get_titles(self):
+        """Function to get titles from T-Mobile summary bill PDF
+
+        :return: List of titles parsed from PDF provided by the user
+        :rtype: (list)
+        """
         return self.data[0].split()
 
     def get_account_data_mapping(self):
+        """Function to get an account to data mapping for each line on account
+
+        :return: List of key-value pairs of account mapped to its details
+        :rtype: (list)
+        """
         account_to_data = []
         real_data = self.data[5:]
         for chunk in real_data:
             if len(chunk) > 0: 
                 data_ = chunk.split(" ")
                 data_obj = {}
-                for d, t in zip(data_, self.titles):
-                    data_obj[t] = d.replace(u'\xa0', u'')
+                for data_value, data_key in zip(data_, self.titles):
+                    data_obj[data_key] = data_value.replace(u'\xa0', u'')
                 account_to_data.append(data_obj)
         return account_to_data
