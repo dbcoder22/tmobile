@@ -37,7 +37,7 @@ class Line():
         if "user" not in self.user or not self.user.name:
             raise UserNotFound("\"user\" details are incorrect in file={}".format(
                 Line.__user_info__))
-        if "email" not in self.user: 
+        if "email" not in self.user:
             raise UserNotFound("\"email\" details are incorrect in file={} for user={}".format(
                 Line.__user_info__,
                 self.user.name))
@@ -48,7 +48,7 @@ class Line():
         :return: Equipment charges on a line
         :rtype: (int)
         """
-        if self.prop["Equipment"] == "-": 
+        if self.prop["Equipment"] == "-":
             return 0
         return parse_to_num(self.prop["Equipment"])
 

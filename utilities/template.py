@@ -1,4 +1,9 @@
 #!/usr/bin/python
+"""
+This module provides all unique dependent functions binded by the
+sole purpose of helping business logic in main. All functions are
+pre-defined string templates
+"""
 
 def get_email_template(user, month, old_month, year):
     """Function to generate email template that would include

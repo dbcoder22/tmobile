@@ -66,7 +66,7 @@ class TMobile():
         account_to_data = []
         real_data = self.data[5:]
         for chunk in real_data:
-            if len(chunk) > 0: 
+            if len(chunk) > 0:
                 data_ = chunk.split(" ")
                 data_obj = {}
                 for data_value, data_key in zip(data_, self.titles):

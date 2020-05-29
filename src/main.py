@@ -24,7 +24,7 @@ from tmobile.models.line import Line
 from tmobile.models.account import Account
 from tmobile.utilities.template import get_email_template, get_help
 from tmobile.utilities.utils import parse_to_float, parse_months, validate_email, UserNotFound
-from tmobile.libs.lib_email import EmailClient,create_message
+from tmobile.libs.lib_email import EmailClient, create_message
 from tmobile.libs.lib_tmobile import TMobile
 from tmobile.libs.lib_venmo import Venmo
 
@@ -40,17 +40,17 @@ def update_and_validate_inputs(_data):
     """
     if len(_data.keys()) < 5:
         raise ValueError("Not enough parameters found")
-    for k, v in _data.items():
+    for k, val in _data.items():
         if k == "venmo" or k == "email":
-            if v.lower() != "true" or v.lower() != "false":
+            if val.lower() != "true" or val.lower() != "false":
                 raise ValueError("Incorrect value provided for boolean \"{}\"".format(k))
-        if k == "email" and not validate_email(v):
+        if k == "email" and not validate_email(val):
             raise ValueError("Incorrect email address provided")
-        if v == "":
+        if val == "":
             raise ValueError("Values not provided as expected")
-        if v.lower() == "true":
+        if val.lower() == "true":
             _data[k] = True
-        elif v.lower() == "false":
+        elif val.lower() == "false":
             _data[k] = False
     return _data
 
