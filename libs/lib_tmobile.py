@@ -4,10 +4,12 @@ Module pertaining to T-Mobile account details that are parsed from PDF provided 
 """
 from tmobile.utilities.utils import parse_to_num
 
-class TMobile():
+
+class TMobile:
     """
     Main class to perform get details pertaining to T-Mobile account
     """
+
     def __init__(self, raw_data):
         self.raw_data = raw_data
         self.positions = self._get_start_end_positions()
@@ -21,7 +23,7 @@ class TMobile():
         :return: Required data from the file
         :rtype: (str)
         """
-        return self.raw_data[self.positions['start'] + 1:self.positions['end']]
+        return self.raw_data[self.positions["start"] + 1 : self.positions["end"]]
 
     def _get_start_end_positions(self):
         """Function to parse the bill and get start & end
@@ -38,7 +40,7 @@ class TMobile():
                 end_pos = _
             if start_pos > 0 and end_pos > 0:
                 break
-        return {'start' : start_pos, 'end' : end_pos}
+        return {"start": start_pos, "end": end_pos}
 
     def _get_account_total(self):
         """Private function to get total amount on the account
@@ -70,6 +72,6 @@ class TMobile():
                 data_ = chunk.split(" ")
                 data_obj = {}
                 for data_value, data_key in zip(data_, self.titles):
-                    data_obj[data_key] = data_value.replace(u'\xa0', u'')
+                    data_obj[data_key] = data_value.replace(u"\xa0", u"")
                 account_to_data.append(data_obj)
         return account_to_data

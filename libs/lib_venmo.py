@@ -7,7 +7,7 @@ from venmo_api import Client
 from tmobile.utilities.utils import parse_json_data, UserNotFound
 
 
-class Venmo():
+class Venmo:
     """
     Main class to perform operations via Venmo
     """
@@ -16,11 +16,12 @@ class Venmo():
 
     def __init__(self):
         if not os.path.exists(Venmo.__venmo_file__):
-            raise FileNotFoundError("Please created venmo.json file containing your access token")
+            raise FileNotFoundError(
+                "Please created venmo.json file containing your access token"
+            )
         data = parse_json_data(Venmo.__venmo_file__)
         self.users = data["users"]
         self.client = Client(access_token=data["token"])
-
 
     def get_user(self, user_name):
         """Function to get user details by Venmo repository
@@ -31,12 +32,11 @@ class Venmo():
         :return: Details of user fetched form the venmo repository
         :rtype: (NamedTuple)
         """
-        users = self.client.user.search_for_users(
-            query=user_name,
-            page=1)
+        users = self.client.user.search_for_users(query=user_name, page=1)
         if len(users) < 1:
             err = "User={} does not exits, please check venmo user name in venmo.json file".format(
-                user_name)
+                user_name
+            )
             raise UserNotFound(err)
         return users[0]
 

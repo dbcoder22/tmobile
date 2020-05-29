@@ -7,6 +7,7 @@ import calendar
 import json
 from datetime import datetime
 
+
 class UserNotFound(Exception):
     """Raise this error when user is not found
 
@@ -57,6 +58,7 @@ def parse_months(file_name):
         old_month = month_num - 1
     old_month_abbr = calendar.month_abbr[old_month]
     return {"current_month": month_abbr, "old_month": old_month_abbr}
+
 
 def validate_email(email_address):
     """Function to check if provide email is valid

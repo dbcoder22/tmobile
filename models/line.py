@@ -4,10 +4,15 @@ Module that represents each line on the T-Mobile account with operations pertain
     - Relies on configs/users.json with appropriate line:{name, email} definition for each user
 """
 import os
-from tmobile.utilities.utils import parse_to_num, parse_to_float, parse_json_data, UserNotFound
+from tmobile.utilities.utils import (
+    parse_to_num,
+    parse_to_float,
+    parse_json_data,
+    UserNotFound,
+)
 
 
-class Line():
+class Line:
     """
     Main class to perform operations each line on T-Mobile account with
     class variable corresponding to full path to user details.json file
@@ -17,7 +22,9 @@ class Line():
 
     def __init__(self, prop):
         if os.path.exists(Line.__user_info__):
-            err = "file={} is missing. Kindly review --help menu".format(Line.__user_info__)
+            err = "file={} is missing. Kindly review --help menu".format(
+                Line.__user_info__
+            )
             raise FileNotFoundError(err)
         self.prop = prop
         self.line = self.prop["Line"]
@@ -35,12 +42,15 @@ class Line():
         :raises UserNotFound: If user or email details are not valid
         """
         if "user" not in self.user or not self.user.name:
-            raise UserNotFound("\"user\" details are incorrect in file={}".format(
-                Line.__user_info__))
+            raise UserNotFound(
+                '"user" details are incorrect in file={}'.format(Line.__user_info__)
+            )
         if "email" not in self.user:
-            raise UserNotFound("\"email\" details are incorrect in file={} for user={}".format(
-                Line.__user_info__,
-                self.user.name))
+            raise UserNotFound(
+                '"email" details are incorrect in file={} for user={}'.format(
+                    Line.__user_info__, self.user.name
+                )
+            )
 
     def _get_equipment(self):
         """Private function to get equipment charges on a line
@@ -79,6 +89,9 @@ class Line():
         :return: One-time charges on a line
         :rtype: (int)
         """
-        if self.prop.get("One-time charges") is None or self.prop.get("One-time charges") == "-":
+        if (
+            self.prop.get("One-time charges") is None
+            or self.prop.get("One-time charges") == "-"
+        ):
             return 0
         return parse_to_num(self.prop["One-time charges"])

@@ -23,7 +23,12 @@ from tabulate import tabulate
 from tmobile.models.line import Line
 from tmobile.models.account import Account
 from tmobile.utilities.template import get_email_template, get_help
-from tmobile.utilities.utils import parse_to_float, parse_months, validate_email, UserNotFound
+from tmobile.utilities.utils import (
+    parse_to_float,
+    parse_months,
+    validate_email,
+    UserNotFound,
+)
 from tmobile.libs.lib_email import EmailClient, create_message
 from tmobile.libs.lib_tmobile import TMobile
 from tmobile.libs.lib_venmo import Venmo
@@ -43,7 +48,7 @@ def update_and_validate_inputs(_data):
     for k, val in _data.items():
         if k == "venmo" or k == "email":
             if val.lower() != "true" or val.lower() != "false":
-                raise ValueError("Incorrect value provided for boolean \"{}\"".format(k))
+                raise ValueError('Incorrect value provided for boolean "{}"'.format(k))
         if k == "email" and not validate_email(val):
             raise ValueError("Incorrect email address provided")
         if val == "":
@@ -73,18 +78,20 @@ def get_args():
             return input_data
         except ValueError as gen_error:
             get_help(input_file)
-            print("\nPlease update {} with correct configuration. ERROR: {}".format(
-                input_file,
-                gen_error))
+            print(
+                "\nPlease update {} with correct configuration. ERROR: {}".format(
+                    input_file, gen_error
+                )
+            )
             sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     args = get_args()
     base_name, ext = os.path.splitext(os.path.basename(args["path"]))
     raw = parser.from_file(args["path"])
-    data = raw['content'].split("\n")
+    data = raw["content"].split("\n")
 
     email_cli = EmailClient()
     tmobile = TMobile(raw_data=data)
@@ -108,23 +115,24 @@ if __name__ == '__main__':
         "One-time",
         "Basic",
         "Tax",
-        "Total"]
+        "Total",
+    ]
     table_data = []
     for _acc_ in lines:
         total_charges = parse_to_float(
-            _acc_.equipment +
-            _acc_.services +
-            tax_on_each_line +
-            basic_on_each_line)
-        chunk = (_acc_.user["name"],
-                 _acc_.line,
-                 _acc_.type,
-                 _acc_.equipment,
-                 _acc_.services,
-                 _acc_.one_time_charge,
-                 basic_on_each_line,
-                 tax_on_each_line,
-                 "${}".format(total_charges))
+            _acc_.equipment + _acc_.services + tax_on_each_line + basic_on_each_line
+        )
+        chunk = (
+            _acc_.user["name"],
+            _acc_.line,
+            _acc_.type,
+            _acc_.equipment,
+            _acc_.services,
+            _acc_.one_time_charge,
+            basic_on_each_line,
+            tax_on_each_line,
+            "${}".format(total_charges),
+        )
         tabular_data = tabulate([chunk], headers=headers, tablefmt="grid")
         print(tabular_data)
         GRAND_TOTAL += total_charges
@@ -133,23 +141,27 @@ if __name__ == '__main__':
                 user=_acc_.user["name"],
                 month=months["current_month"],
                 old_month=months["old_month"],
-                year=curr_year)
+                year=curr_year,
+            )
 
             message = create_message(
                 sender_email=args["sender"],
                 to_email=_acc_.user["email"],
                 subject=SUBJECT,
-                message_text="{}\n{}".format(EMAIL_TEMPLATE, tabular_data))
+                message_text="{}\n{}".format(EMAIL_TEMPLATE, tabular_data),
+            )
             if email_cli.send_message(message=message):
-                print("Email to user={} for line={}\t\t\t\tSUCCESS".format(
-                    _acc_.user["name"],
-                    _acc_.line
-                ))
+                print(
+                    "Email to user={} for line={}\t\t\t\tSUCCESS".format(
+                        _acc_.user["name"], _acc_.line
+                    )
+                )
             else:
-                print("Email to user={} for line={}\t\t\t\tFAILED".format(
-                    _acc_.user["name"],
-                    _acc_.line
-                ))
+                print(
+                    "Email to user={} for line={}\t\t\t\tFAILED".format(
+                        _acc_.user["name"], _acc_.line
+                    )
+                )
         if args["venmo"] and args["user"].lower() != _acc_.user["name"].lower():
             print("Sending Venmo request ...")
             venmo_ = Venmo()
@@ -160,14 +172,18 @@ if __name__ == '__main__':
                     note=SUBJECT + v_name["additional_note"],
                     user_id=user_details.id,
                     amount=total_charges,
-                    addtional_amount=v_name["additonal_amount"]
+                    addtional_amount=v_name["additonal_amount"],
+                )
+                print(
+                    "Request to user={} for line={}\t\t\t\tSUCCESS".format(
+                        user_details.id, _acc_.line
                     )
-                print("Request to user={} for line={}\t\t\t\tSUCCESS".format(
-                    user_details.id,
-                    _acc_.line))
+                )
             except UserNotFound as err:
                 print(err)
-                print("Request to user={} for line={}\t\t\t\tFAILED".format(
-                    _acc_.user["name"],
-                    _acc_.line))
+                print(
+                    "Request to user={} for line={}\t\t\t\tFAILED".format(
+                        _acc_.user["name"], _acc_.line
+                    )
+                )
     print("TOTAL AMOUNT: {}".format(GRAND_TOTAL))

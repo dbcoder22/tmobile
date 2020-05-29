@@ -6,10 +6,12 @@ Module that represents the T-Mobile account with operations pertaining to whole 
 
 from tmobile.utilities.utils import parse_to_float
 
-class Account():
+
+class Account:
     """
     Main class to perform operations pertaining to T-Mobile account
     """
+
     def __init__(self, all_lines, account_total):
         self.lines = all_lines
         self.account_total = account_total
@@ -43,7 +45,7 @@ class Account():
         """
         extra_charge_on_line = (self.no_of_lines - 4) * 20
         total_charges = self.account_total + extra_charge_on_line
-        return parse_to_float(total_charges/self.no_of_lines)
+        return parse_to_float(total_charges / self.no_of_lines)
 
     def get_tax_charge(self):
         """Function to get tax charges for each line on the account
@@ -51,4 +53,4 @@ class Account():
         :return: Tax chagge for each line
         :rtype: (float)
         """
-        return parse_to_float(self.tax_total/self.no_of_lines)
+        return parse_to_float(self.tax_total / self.no_of_lines)

@@ -5,6 +5,7 @@ sole purpose of helping business logic in main. All functions are
 pre-defined string templates
 """
 
+
 def get_email_template(user, month, old_month, year):
     """Function to generate email template that would include
        the given user, month, old month and year
@@ -27,6 +28,7 @@ def get_email_template(user, month, old_month, year):
        \nYou may have recieved an auto-generated Venmo request on my behalf for this {month}\n"
     return boiler_plate.format(user=user, month=month, year=year, oldmonth=old_month)
 
+
 def get_help(input_file):
     """Function to get the help menu for this application
 
@@ -34,10 +36,12 @@ def get_help(input_file):
     :type input_file: (str)
     """
     print(
-        "\nIncorrect inputs provided. Please configure file={} as an example below:\
-         \n\t-\"path\": (Full path) Path to summary bill .pdf file\
-         \n\t-\"email\": (True | False) Toggle for sending email to users\
-         \n\t-\"sender\": Email of the sender\
-         \n\t-\"venmo\": (True | False) for to generate venmo requests(venmo.json required)\
-         \n\t-\"user\": User from (configs/users.json) who the venmo requests will be sent"
-        .format(input_file))
+        '\nIncorrect inputs provided. Please configure file={} as an example below:\
+         \n\t-"path": (Full path) Path to summary bill .pdf file\
+         \n\t-"email": (True | False) Toggle for sending email to users\
+         \n\t-"sender": Email of the sender\
+         \n\t-"venmo": (True | False) for to generate venmo requests(venmo.json required)\
+         \n\t-"user": User from (configs/users.json) who the venmo requests will be sent'.format(
+            input_file
+        )
+    )
