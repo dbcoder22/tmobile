@@ -12,7 +12,7 @@ class Account:
     Main class to perform operations pertaining to T-Mobile account
     """
 
-    def __init__(self, all_lines, account_total):
+    def __init__(self, all_lines, account_total=0):
         self.lines = all_lines
         self.account_total = account_total
         self.tax_total = self._get_tax_total()

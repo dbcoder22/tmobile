@@ -9,6 +9,7 @@ from tmobile.utilities.utils import (
     parse_to_float,
     parse_json_data,
     UserNotFound,
+    validate_email
 )
 
 
@@ -18,42 +19,55 @@ class Line:
     class variable corresponding to full path to user details.json file
     """
 
-    __user_info__ = "configs/users.json"
-
-    def __init__(self, prop):
-        if os.path.exists(Line.__user_info__):
-            err = "file={} is missing. Kindly review --help menu".format(
-                Line.__user_info__
-            )
-            raise FileNotFoundError(err)
+    def __init__(self, prop, user_info_file="configs/users.json"):
+        self.user_info_file = user_info_file
         self.prop = prop
-        self.line = self.prop["Line"]
-        self.type = self.prop["Type"]
-        self.one_time_charge = self._get_onetime_charge()
-        self.equipment = self._get_equipment()
-        self.services = self._get_services()
-        self.tax = self._get_tax()
-        self.user = parse_json_data(Line.__user_info__)[self.line]
-        self._validate_user_info()
+        self.__check_file()
+        self.__validate_user_info()
 
-    def _validate_user_info(self):
+    def __validate_user_info(self):
         """Private function to validate the user information provided in the json file
 
         :raises UserNotFound: If user or email details are not valid
         """
-        if "user" not in self.user or not self.user.name:
+        if "name" not in self.user or not self.user["name"]:
             raise UserNotFound(
-                '"user" details are incorrect in file={}'.format(Line.__user_info__)
+                '"name" details are missing in file={}'.format(self.user_info_file)
             )
         if "email" not in self.user:
             raise UserNotFound(
-                '"email" details are incorrect in file={} for user={}'.format(
-                    Line.__user_info__, self.user.name
+                '"email" details are missing in file={} for user={}'.format(
+                    self.user_info_file, self.user["name"]
                 )
             )
+        if not validate_email(self.user["email"]):
+            raise ValueError("Incorrect email={} address provided for user={}".format(
+                self.user["email"],
+                self.user["user"]))
 
-    def _get_equipment(self):
-        """Private function to get equipment charges on a line
+    def __check_file(self):
+        """Function to check if file exists
+
+        :raises FileNotFoundError: If file is not found
+        """
+        if not os.path.exists(self.user_info_file):
+            err = "file={} is missing. Kindly review --help menu".format(
+                self.user_info_file
+            )
+            raise FileNotFoundError(err)
+
+    @property
+    def line(self):
+        """Property defining number associated with line
+
+        :return: Number associated with line
+        :rtype: (str)
+        """
+        return self.prop["Line"]
+
+    @property
+    def equipment(self):
+        """Property defining equipment charges on a line
 
         :return: Equipment charges on a line
         :rtype: (int)
@@ -62,8 +76,9 @@ class Line:
             return 0
         return parse_to_num(self.prop["Equipment"])
 
-    def _get_services(self):
-        """Private function to get service charges on a line
+    @property
+    def services(self):
+        """Property defining service charges on a line
 
         :return: Service charges on a line
         :rtype: (int)
@@ -72,8 +87,9 @@ class Line:
             return 0
         return parse_to_num(self.prop["Services"])
 
-    def _get_tax(self):
-        """Private function to calculate and get tax on a line
+    @property
+    def tax(self):
+        """Property defining tax on a line
 
         :return: Tax amount on a line
         :rtype: (float)
@@ -83,15 +99,22 @@ class Line:
             tax = tax - 20
         return parse_to_float(tax)
 
-    def _get_onetime_charge(self):
-        """Private function to get one-time charges on a line
+    @property
+    def one_time_charge(self):
+        """Property defining one-time charges on a line
 
         :return: One-time charges on a line
         :rtype: (int)
         """
-        if (
-            self.prop.get("One-time charges") is None
-            or self.prop.get("One-time charges") == "-"
-        ):
+        if (self.prop.get("One-time charges") is None or self.prop.get("One-time charges") == "-"):
             return 0
         return parse_to_num(self.prop["One-time charges"])
+
+    @property
+    def user(self):
+        """Property defining user details on a line
+
+        :return: User details defined in users.json file
+        :rtype: (dict)
+        """
+        return parse_json_data(self.user_info_file)[self.line]

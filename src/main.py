@@ -46,10 +46,10 @@ def update_and_validate_inputs(_data):
     if len(_data.keys()) < 5:
         raise ValueError("Not enough parameters found")
     for k, val in _data.items():
-        if k == "venmo" or k == "email":
-            if val.lower() != "true" or val.lower() != "false":
+        if k in ["venmo", "email"]:
+            if val.lower() not in ["true", "false"]:
                 raise ValueError('Incorrect value provided for boolean "{}"'.format(k))
-        if k == "email" and not validate_email(val):
+        if k == "sender" and not validate_email(val):
             raise ValueError("Incorrect email address provided")
         if val == "":
             raise ValueError("Values not provided as expected")
@@ -92,7 +92,9 @@ if __name__ == "__main__":
     base_name, ext = os.path.splitext(os.path.basename(args["path"]))
     raw = parser.from_file(args["path"])
     data = raw["content"].split("\n")
-
+    with open("/tmp/test_data_file.txt", "w") as f:
+        f.write(str(data))
+    sys.exit(0)
     email_cli = EmailClient()
     tmobile = TMobile(raw_data=data)
     account_to_data = tmobile.get_account_data_mapping()
