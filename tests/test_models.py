@@ -14,31 +14,33 @@ from tmobile.utilities.utils import UserNotFound
 __all_line_props__ = [
     {
         "prop": {
-            "Line": "123456789", "Type": "Voice", "Equipment": "$10", "Services": "$15", 
-            "Plans": "$24.43", "One-time charges": "$0"
-            },
-        "test_info_file": "/tmp/test_info_line.json"
+            "Line": "123456789",
+            "Type": "Voice",
+            "Equipment": "$10",
+            "Services": "$15",
+            "Plans": "$24.43",
+            "One-time charges": "$0",
+        },
+        "test_info_file": "/tmp/test_info_line.json",
     },
     {
         "prop": {
-            "Line": "234567891", "Type": "Voice", "Equipment": "$0", "Services": "$0", 
-            "Plans": "$24.43", "One-time charges": "$22"
+            "Line": "234567891",
+            "Type": "Voice",
+            "Equipment": "$0",
+            "Services": "$0",
+            "Plans": "$24.43",
+            "One-time charges": "$22",
         },
-        "test_info_file": "/tmp/test_info_line.json"
-    }
+        "test_info_file": "/tmp/test_info_line.json",
+    },
 ]
 
 __test_data__ = dict()
 
-__test_data__["123456789"] = {
-    "name": "Abcd",
-    "email": "abcd@gmail.com"
-    }
+__test_data__["123456789"] = {"name": "Abcd", "email": "abcd@gmail.com"}
 
-__test_data__["234567891"] = {
-    "name": "Efgh",
-    "email": "efgh@gmail.com"
-    }
+__test_data__["234567891"] = {"name": "Efgh", "email": "efgh@gmail.com"}
 
 __test_info_file__ = "/tmp/test_info_line.json"
 
@@ -53,6 +55,7 @@ def test_create_line_object_error_case():
     with pytest.raises(FileNotFoundError):
         Line(prop=__all_line_props__[0], user_info_file="non_existant_file.json")
 
+
 @patch("tmobile.models.line.Line.user")
 def test_create_line_object_missing_user_name(user):
     """
@@ -64,6 +67,7 @@ def test_create_line_object_missing_user_name(user):
     with pytest.raises(UserNotFound):
         Line(prop=__all_line_props__[0]["prop"], user_info_file=__test_info_file__)
 
+
 @patch("tmobile.models.line.Line.user")
 def test_create_line_object_missing_user_email(user):
     """
@@ -74,6 +78,7 @@ def test_create_line_object_missing_user_email(user):
     user.return_value = mock_data
     with pytest.raises(UserNotFound):
         Line(prop=__all_line_props__[0]["prop"], user_info_file=__test_info_file__)
+
 
 @patch("tmobile.models.line.Line.user")
 def test_create_line_object_incorrect_user_email(user):
@@ -91,9 +96,8 @@ def test_create_line_object_incorrect_user_email(user):
     with pytest.raises(UserNotFound):
         Line(prop=__all_line_props__[0]["prop"], user_info_file=__test_info_file__)
 
-@pytest.mark.parametrize(
-    ("prop_"), [x["prop"] for x in __all_line_props__]
-)
+
+@pytest.mark.parametrize(("prop_"), [x["prop"] for x in __all_line_props__])
 def test_all_functions(prop_):
     """
     Test all class Line functions
@@ -107,11 +111,15 @@ def test_all_functions(prop_):
     assert line_.user["name"] in ["Abcd", "Efgh"]
     assert line_.user["email"] in ["abcd@gmail.com", "efgh@gmail.com"]
 
+
 def test_all_account():
     """
     Test all class Accoount functions
     """
-    lines_ = [Line(prop=x["prop"], user_info_file=x["test_info_file"]) for x in __all_line_props__]
+    lines_ = [
+        Line(prop=x["prop"], user_info_file=x["test_info_file"])
+        for x in __all_line_props__
+    ]
     account_ = Account(all_lines=lines_, account_total=50)
     assert account_.get_basic_charge() == 5
     assert account_.get_tax_charge() == 4.43

@@ -42,8 +42,10 @@ class TMobile:
             if start_pos > 0 and end_pos > 0:
                 break
         if not 0 <= start_pos < end_pos:
-            raise OSError("Could not parse given pdf for required data. \
-                Please verify or contact developer")
+            raise OSError(
+                "Could not parse given pdf for required data. \
+                Please verify or contact developer"
+            )
         return {"start": start_pos, "end": end_pos}
 
     def _get_account_total(self):

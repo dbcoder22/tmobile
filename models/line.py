@@ -9,7 +9,7 @@ from tmobile.utilities.utils import (
     parse_to_float,
     parse_json_data,
     UserNotFound,
-    validate_email
+    validate_email,
 )
 
 
@@ -41,9 +41,11 @@ class Line:
                 )
             )
         if not validate_email(self.user["email"]):
-            raise ValueError("Incorrect email={} address provided for user={}".format(
-                self.user["email"],
-                self.user["user"]))
+            raise ValueError(
+                "Incorrect email={} address provided for user={}".format(
+                    self.user["email"], self.user["user"]
+                )
+            )
 
     def __check_file(self):
         """Function to check if file exists
@@ -106,7 +108,10 @@ class Line:
         :return: One-time charges on a line
         :rtype: (int)
         """
-        if (self.prop.get("One-time charges") is None or self.prop.get("One-time charges") == "-"):
+        if (
+            self.prop.get("One-time charges") is None
+            or self.prop.get("One-time charges") == "-"
+        ):
             return 0
         return parse_to_num(self.prop["One-time charges"])
 
