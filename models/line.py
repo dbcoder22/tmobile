@@ -23,7 +23,7 @@ class Line:
         self.user_info_file = user_info_file
         self.prop = prop
         self.__check_file()
-        self.user = self.__user()
+        self.user = self.get_user()
         self.__validate_user_info()
 
     def __validate_user_info(self):
@@ -59,7 +59,7 @@ class Line:
             )
             raise FileNotFoundError(err)
 
-    def __user(self):
+    def get_user(self):
         """Property defining user details on a line
 
         :return: User details defined in users.json file

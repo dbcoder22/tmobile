@@ -56,7 +56,7 @@ def test_create_line_object_error_case():
         Line(prop=__all_line_props__[0], user_info_file="non_existant_file.json")
 
 
-@patch("tmobile.models.line.Line.user")
+@patch("tmobile.models.line.Line.get_user")
 def test_create_line_object_missing_user_name(user):
     """
     Test UserNotFound for missing user_name
@@ -68,19 +68,19 @@ def test_create_line_object_missing_user_name(user):
         Line(prop=__all_line_props__[0]["prop"], user_info_file=__test_info_file__)
 
 
-@patch("tmobile.models.line.Line.user")
-def test_create_line_object_missing_user_email(user):
+@patch("tmobile.models.line.Line.get_user")
+def test_create_line_object_missing_user_email(_user):
     """
     Test UserNotFound for missing email
     """
     mock_data = Mock()
     mock_data = {"user": "abcd"}
-    user.return_value = mock_data
+    _user.return_value = mock_data
     with pytest.raises(UserNotFound):
         Line(prop=__all_line_props__[0]["prop"], user_info_file=__test_info_file__)
 
 
-@patch("tmobile.models.line.Line.user")
+@patch("tmobile.models.line.Line.get_user")
 def test_create_line_object_incorrect_user_email(user):
     """
     Test UserNotFound for incorrect user_email
