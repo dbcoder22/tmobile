@@ -68,7 +68,7 @@ def validate_email(email_address):
     """
     if "@" not in email_address:
         return False
-    if ".com" not in email_address:
+    if ".com" not in email_address and ".edu" not in email_address:
         return False
     if len(email_address) < 5:
         return False

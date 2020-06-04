@@ -23,6 +23,7 @@ class Line:
         self.user_info_file = user_info_file
         self.prop = prop
         self.__check_file()
+        self.user = self.__user()
         self.__validate_user_info()
 
     def __validate_user_info(self):
@@ -43,7 +44,7 @@ class Line:
         if not validate_email(self.user["email"]):
             raise ValueError(
                 "Incorrect email={} address provided for user={}".format(
-                    self.user["email"], self.user["user"]
+                    self.user["email"], self.user["name"]
                 )
             )
 
@@ -58,6 +59,14 @@ class Line:
             )
             raise FileNotFoundError(err)
 
+    def __user(self):
+        """Property defining user details on a line
+
+        :return: User details defined in users.json file
+        :rtype: (dict)
+        """
+        return parse_json_data(self.user_info_file)[self.line]
+
     @property
     def line(self):
         """Property defining number associated with line
@@ -66,6 +75,15 @@ class Line:
         :rtype: (str)
         """
         return self.prop["Line"]
+
+    @property
+    def linetype(self):
+        """Property defining type of line
+
+        :return: Type of line
+        :rtype: (str)
+        """
+        return self.prop["Type"]
 
     @property
     def equipment(self):
@@ -114,12 +132,3 @@ class Line:
         ):
             return 0
         return parse_to_num(self.prop["One-time charges"])
-
-    @property
-    def user(self):
-        """Property defining user details on a line
-
-        :return: User details defined in users.json file
-        :rtype: (dict)
-        """
-        return parse_json_data(self.user_info_file)[self.line]

@@ -92,9 +92,7 @@ if __name__ == "__main__":
     base_name, ext = os.path.splitext(os.path.basename(args["path"]))
     raw = parser.from_file(args["path"])
     data = raw["content"].split("\n")
-    with open("/tmp/test_data_file.txt", "w") as f:
-        f.write(str(data))
-    sys.exit(0)
+
     email_cli = EmailClient()
     tmobile = TMobile(raw_data=data)
     account_to_data = tmobile.get_account_data_mapping()
@@ -127,7 +125,7 @@ if __name__ == "__main__":
         chunk = (
             _acc_.user["name"],
             _acc_.line,
-            _acc_.type,
+            _acc_.linetype,
             _acc_.equipment,
             _acc_.services,
             _acc_.one_time_charge,
@@ -138,6 +136,9 @@ if __name__ == "__main__":
         tabular_data = tabulate([chunk], headers=headers, tablefmt="grid")
         print(tabular_data)
         GRAND_TOTAL += total_charges
+
+        if args["test"]:
+            continue
         if args["email"]:
             EMAIL_TEMPLATE = get_email_template(
                 user=_acc_.user["name"],
