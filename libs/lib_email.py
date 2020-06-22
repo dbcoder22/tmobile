@@ -14,6 +14,14 @@ from google.auth.transport.requests import Request
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
 
+class EmailFailure(Exception):
+    """Raise this error when service failed to send email
+
+    :param Exception: Base Exception Class object
+    :type Exception: (Exception)
+    """
+
+
 def create_message(sender_email, to_email, subject, message_text):
     """Function to generate a raw format utf-8 message based on given inputs
 
@@ -79,13 +87,9 @@ class EmailClient:
         :return: ID of the email sent if successful | None if failed to send email
         :rtype: (id | None)
         """
-        try:
-            message = (
-                self.service.users()
-                .messages()
-                .send(userId=user_id, body=message)
-                .execute()
-            )
-            return message["id"]
-        except Exception as exc_error:
-            print("An error occurred when sending email: %s" % exc_error)
+        message = (
+            self.service.users().messages().send(userId=user_id, body=message).execute()
+        )
+        return message.get(
+            "id", EmailFailure("Failed to send email to address={}".format(user_id))
+        )

@@ -6,27 +6,27 @@ pre-defined string templates
 """
 
 
-def get_email_template(user, month, old_month, year):
+def get_email_template(user, month, next_month, year):
     """Function to generate email template that would include
-       the given user, month, old month and year
+       the given user, month, next month and year
 
     :param user: Name of the user whom email is addressed
     :type user: (str)
     :param month: Abbr of current month
     :type month: (str)
-    :param old_month: Abbr of old monh
-    :type old_month: (str)
+    :param next_month: Abbr of next month
+    :type next_month: (str)
     :param year: Current year
     :type year: (int)
-    :return: Email template that includes user, month, old_month and year
+    :return: Email template that includes user, month, next month and year
     :rtype: (str)
     """
     boiler_plate = "**********   THIS IS AN AUTO-GENERATED EMAIL **********\
        \nHello {user},\n\
-       \nFollowing is the bill details for month of {month} {year} (This cover billing cycle from {oldmonth} 19 - {month} 18)\n\
-       \nAuto-pay is enabled. If you need any copy of the bill for reimbursement please make sure you get it before {month} 11th\n\
-       \nYou may have recieved an auto-generated Venmo request on my behalf for this {month}\n"
-    return boiler_plate.format(user=user, month=month, year=year, oldmonth=old_month)
+       \nFollowing is the bill details for month of {month} {year} (This cover billing cycle from {month} 19 - {next_month} 18)\n\
+       \nAuto-pay is enabled. If you need any copy of the bill for reimbursement please make sure you get it before {next_month} 11th\n\
+       \nYou may have recieved an auto-generated Venmo request on my behalf for this {next_month}\n"
+    return boiler_plate.format(user=user, month=month, year=year, next_month=next_month)
 
 
 def get_help(input_file):

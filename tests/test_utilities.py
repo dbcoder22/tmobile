@@ -10,23 +10,23 @@ from tmobile.utilities.utils import parse_months, parse_to_float, parse_to_num
 
 
 @pytest.mark.parametrize(
-    ("user", "month", "old_month", "year"),
+    ("user", "month", "new_month", "year"),
     [
-        ("Rob", "Apr", "Mar", 2020),
-        ("Mark", "Sep", "Aug", 2021),
-        ("John", "Jan", "Dec", 2019),
+        ("Rob", "Apr", "May", 2020),
+        ("Mark", "Sep", "Oct", 2021),
+        ("John", "Dec", "Jan", 2019),
     ],
 )
-def test_get_email_template(user, month, old_month, year):
+def test_get_email_template(user, month, new_month, year):
     """
     Test function get_email_template
     """
-    template = get_email_template(user, month, old_month, year)
+    template = get_email_template(user, month, new_month, year)
     assert "Hello {}".format(user) in template
     assert "{} {}".format(month, year) in template
-    assert "{} 19".format(old_month) in template
-    assert "{} 18".format(month) in template
-    assert "before {}".format(month) in template
+    assert "{} 19".format(month) in template
+    assert "{} 18".format(new_month) in template
+    assert "before {}".format(new_month) in template
 
 
 @pytest.mark.parametrize(
@@ -63,8 +63,8 @@ def test_parse_to_float(input_value, expected_val):
 @pytest.mark.parametrize(
     ("input_string", "expected_val"),
     [
-        ("SummaryBillApr", {"current_month": "Apr", "old_month": "Mar"}),
-        ("SummaryBillJan", {"current_month": "Jan", "old_month": "Dec"}),
+        ("SummaryBillApr", {"current_month": "Apr", "next_month": "May"}),
+        ("SummaryBillDec", {"current_month": "Dec", "next_month": "Jan"}),
     ],
 )
 def test_parse_months(input_string, expected_val):
@@ -73,5 +73,5 @@ def test_parse_months(input_string, expected_val):
     """
     input_string += str(datetime.today().year)
     parsed_months = parse_months(input_string)
-    for key in ["current_month", "old_month"]:
+    for key in ["current_month", "next_month"]:
         assert parsed_months[key] == expected_val[key]

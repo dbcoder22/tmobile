@@ -41,23 +41,23 @@ def parse_to_float(val):
 
 
 def parse_months(file_name):
-    """Function to get current and old month by parsing a given file name without extension
-       e.g. parse_months("SummaryBillApr2020") -> {"current_month": "Apr", "old_month": "Mar"}
+    """Function to get current and new month by parsing a given file name without extension
+       e.g. parse_months("SummaryBillApr2020") -> {"current_month": "Apr", "next_month": "May"}
 
     :param file_name: Name of the file to parse
     :type file_name: (str)
-    :return: Abbrevation of current month and old month
+    :return: Abbrevation of current month and new month
     :rtype: (dict)
     """
     current_year = str(datetime.today().year)
     month_abbr = file_name.replace(current_year, "")[-3:]
     month_num = list(calendar.month_abbr).index(month_abbr)
-    if month_num - 1 < 1:
-        old_month = 12
+    if month_num == 12:
+        new_month = 1
     else:
-        old_month = month_num - 1
-    old_month_abbr = calendar.month_abbr[old_month]
-    return {"current_month": month_abbr, "old_month": old_month_abbr}
+        new_month = month_num + 1
+    new_month_abbr = calendar.month_abbr[new_month]
+    return {"current_month": month_abbr, "next_month": new_month_abbr}
 
 
 def validate_email(email_address):
