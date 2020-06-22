@@ -108,7 +108,7 @@ def __send_email__(account_details, account_data):
     email_template = get_email_template(
         user=account_details.user["name"],
         month=months["current_month"],
-        old_month=months["old_month"],
+        next_month=months["next_month"],
         year=curr_year)
 
     message = create_message(
@@ -127,9 +127,8 @@ def __send_venmo_request__(line, total):
         note=SUBJECT + v_name["additional_note"],
         user_id=user_details.id,
         amount=total,
-        addtional_amount=v_name["additonal_amount"],
+        addtional_amount=v_name["additional_amount"],
     )
-
 
 
 if __name__ == "__main__":
@@ -150,7 +149,7 @@ if __name__ == "__main__":
 
     months = parse_months(file_name=base_name)
     curr_year = datetime.today().year
-    SUBJECT = "T-Mobile({} {})".format(months["current_month"], curr_year)
+    SUBJECT = "T-Mobile({} {})".format(months["next_month"], curr_year)
     GRAND_TOTAL = 0
     headers = [
         "User",
