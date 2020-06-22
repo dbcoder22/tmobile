@@ -88,9 +88,8 @@ class EmailClient:
         :rtype: (id | None)
         """
         message = (
-            self.service.users()
-            .messages()
-            .send(userId=user_id, body=message)
-            .execute()
+            self.service.users().messages().send(userId=user_id, body=message).execute()
         )
-        return message.get("id", EmailFailure("Failed to send email to address={}".format(user_id)))
+        return message.get(
+            "id", EmailFailure("Failed to send email to address={}".format(user_id))
+        )

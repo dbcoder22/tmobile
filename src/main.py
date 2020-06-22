@@ -85,10 +85,14 @@ def __get_args__():
             )
             sys.exit(1)
 
+
 def __get_total_charges_and_tabular_data__(account_details):
     total_charges = parse_to_float(
-        account_details.equipment + account_details.services + tax_on_each_line + basic_on_each_line
-        )
+        account_details.equipment
+        + account_details.services
+        + tax_on_each_line
+        + basic_on_each_line
+    )
     chunk = (
         account_details.user["name"],
         account_details.line,
@@ -99,9 +103,10 @@ def __get_total_charges_and_tabular_data__(account_details):
         basic_on_each_line,
         tax_on_each_line,
         "${}".format(total_charges),
-        )
+    )
     tabular_data = tabulate([chunk], headers=headers, tablefmt="grid")
     return tabular_data, total_charges
+
 
 def __send_email__(account_details, account_data):
 
@@ -109,7 +114,8 @@ def __send_email__(account_details, account_data):
         user=account_details.user["name"],
         month=months["current_month"],
         next_month=months["next_month"],
-        year=curr_year)
+        year=curr_year,
+    )
 
     message = create_message(
         sender_email=args["sender"],
@@ -118,6 +124,7 @@ def __send_email__(account_details, account_data):
         message_text="{}\n{}".format(email_template, account_data),
     )
     email_cli.send_message(message=message)
+
 
 def __send_venmo_request__(line, total):
     venmo_ = Venmo()
@@ -165,7 +172,9 @@ if __name__ == "__main__":
     table_data = []
     for _acc_ in lines:
         user_name = _acc_.user["name"]
-        data_for_account, sub_total = __get_total_charges_and_tabular_data__(account_details=_acc_)
+        data_for_account, sub_total = __get_total_charges_and_tabular_data__(
+            account_details=_acc_
+        )
         print(data_for_account)
         GRAND_TOTAL += sub_total
 
@@ -177,16 +186,32 @@ if __name__ == "__main__":
                 __send_email__(account_details=_acc_, account_data=data_for_account)
             except EmailFailure as err:
                 print(err)
-                print("Email to user={} for line={}\t\t\t\tFAILED".format(user_name, _acc_.line))
+                print(
+                    "Email to user={} for line={}\t\t\t\tFAILED".format(
+                        user_name, _acc_.line
+                    )
+                )
             else:
-                print("Email to user={} for line={}\t\t\t\tSUCCESS".format(user_name, _acc_.line))
+                print(
+                    "Email to user={} for line={}\t\t\t\tSUCCESS".format(
+                        user_name, _acc_.line
+                    )
+                )
         if args["venmo"] and args["user"].lower() != user_name.lower():
             print("Sending Venmo request ...")
             try:
                 __send_venmo_request__(line=_acc_.line, total=sub_total)
             except UserNotFound as err:
                 print(err)
-                print("Request to user={} for line={}\t\t\t\tFAILED".format(user_name, _acc_.line))
+                print(
+                    "Request to user={} for line={}\t\t\t\tFAILED".format(
+                        user_name, _acc_.line
+                    )
+                )
             else:
-                print("Request to user={} for line={}\t\t\t\tSUCCESS".format(user_name, _acc_.line))
+                print(
+                    "Request to user={} for line={}\t\t\t\tSUCCESS".format(
+                        user_name, _acc_.line
+                    )
+                )
     print("TOTAL AMOUNT: {}".format(GRAND_TOTAL))
