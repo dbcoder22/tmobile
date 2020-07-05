@@ -90,21 +90,22 @@ def __get_total_charges_and_tabular_data__(account_details):
     total_charges = parse_to_float(
         account_details.equipment
         + account_details.services
+        + account_details.one_time_charge
         + tax_on_each_line
         + basic_on_each_line
     )
-    chunk = (
-        account_details.user["name"],
-        account_details.line,
-        account_details.linetype,
-        account_details.equipment,
-        account_details.services,
-        account_details.one_time_charge,
-        basic_on_each_line,
-        tax_on_each_line,
-        "${}".format(total_charges),
-    )
-    tabular_data = tabulate([chunk], headers=headers, tablefmt="grid")
+    chunk = [
+        ["User", account_details.user["name"]],
+        ["Line", account_details.line],
+        ["Type", account_details.linetype],
+        ["Equipment", account_details.equipment],
+        ["Services", account_details.services],
+        ["One-time", account_details.one_time_charge],
+        ["Basic", basic_on_each_line],
+        ["Tax", tax_on_each_line],
+        ["Total", "${}".format(total_charges)],
+    ]
+    tabular_data = tabulate(chunk, tablefmt="grid")
     return tabular_data, total_charges
 
 
@@ -158,17 +159,6 @@ if __name__ == "__main__":
     curr_year = datetime.today().year
     SUBJECT = "T-Mobile({} {})".format(months["next_month"], curr_year)
     GRAND_TOTAL = 0
-    headers = [
-        "User",
-        "Line",
-        "Type",
-        "Equipment",
-        "Services",
-        "One-time",
-        "Basic",
-        "Tax",
-        "Total",
-    ]
     table_data = []
     for _acc_ in lines:
         user_name = _acc_.user["name"]
@@ -177,7 +167,6 @@ if __name__ == "__main__":
         )
         print(data_for_account)
         GRAND_TOTAL += sub_total
-
         if args["test"]:
             continue
         if args["email"]:

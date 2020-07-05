@@ -21,11 +21,11 @@ def get_email_template(user, month, next_month, year):
     :return: Email template that includes user, month, next month and year
     :rtype: (str)
     """
-    boiler_plate = "**********   THIS IS AN AUTO-GENERATED EMAIL **********\
+    boiler_plate = "**********   THIS IS AN AUTO-GENERATED EMAIL **********\n\
        \nHello {user},\n\
-       \nFollowing is the bill details for month of {month} {year} (This cover billing cycle from {month} 19 - {next_month} 18)\n\
+       \nFollowing is the bill details for month of {month} {year} (This covers billing cycle from {month} 19 - {next_month} 18)\n\
        \nAuto-pay is enabled. If you need any copy of the bill for reimbursement please make sure you get it before {next_month} 11th\n\
-       \nYou may have recieved an auto-generated Venmo request on my behalf for this {next_month}\n"
+       \nYou may have recieved an auto-generated Venmo request for the month of {next_month}\n"
     return boiler_plate.format(user=user, month=month, year=year, next_month=next_month)
 
 

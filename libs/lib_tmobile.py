@@ -63,7 +63,10 @@ class TMobile:
         :return: List of titles parsed from PDF provided by the user
         :rtype: (list)
         """
-        return self._data[0].split()
+        titles = self._data[0].split()
+        if "charges" in titles:
+            titles.pop(titles.index("charges"))
+        return titles
 
     def get_account_data_mapping(self):
         """Function to get an account to data mapping for each line on account

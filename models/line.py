@@ -126,9 +126,6 @@ class Line:
         :return: One-time charges on a line
         :rtype: (int)
         """
-        if (
-            self.prop.get("One-time charges") is None
-            or self.prop.get("One-time charges") == "-"
-        ):
+        if self.prop.get("One-time") is None or self.prop.get("One-time") == "-":
             return 0
-        return parse_to_num(self.prop["One-time charges"])
+        return parse_to_num(self.prop["One-time"])
