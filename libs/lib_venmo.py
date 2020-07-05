@@ -52,4 +52,8 @@ class Venmo:
         :param addtional_amount: Additional amount to added to the request, defaults to 0
         :type addtional_amount:(int), optional
         """
-        self.client.payment.request_money(amount + addtional_amount, note, user_id)
+        total_amount = amount + addtional_amount
+        if total_amount < 0:
+            print("Total amount < 0, request not sent")
+        else:
+            self.client.payment.request_money(total_amount, note, user_id)
