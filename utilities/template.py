@@ -44,6 +44,6 @@ def get_help(input_file):
          \n\t-"email": (True | False) Toggle for sending email to users\
          \n\t-"sender": Email of the sender\
          \n\t-"venmo": (True | False) for to generate venmo requests(venmo.json required)\
-         \n\t-"user": User from (configs/users.json) who the venmo requests will be sent' %
-         input_file
+         \n\t-"user": User from (configs/users.json) who the venmo requests will be sent'
+        % input_file
     )
