@@ -16,6 +16,7 @@ Configuration needed:
 """
 from datetime import datetime
 import json
+import logging
 import os
 import sys
 from tika import parser
@@ -67,10 +68,10 @@ def __get_args__():
     :rtype: (dict)
     """
     input_file = "configs/input.json"
-    print("\nWelcome to T-Mobile bill generator application\n")
+    logger.info("\nWelcome to T-Mobile bill generator application\n")
     if not os.path.exists(input_file):
         get_help(input_file)
-        raise FileNotFoundError("\nPlease create file={}".format(input_file))
+        raise FileNotFoundError("\nPlease create file=%s" %input_file)
     with open(input_file) as user_input_file:
         input_data = json.load(user_input_file)
         try:
@@ -78,10 +79,8 @@ def __get_args__():
             return input_data
         except ValueError as gen_error:
             get_help(input_file)
-            print(
-                "\nPlease update {} with correct configuration. ERROR: {}".format(
-                    input_file, gen_error
-                )
+            logger.info(
+                "\nPlease update %s with correct configuration. ERROR: %s" % input_file, gen_error
             )
             sys.exit(1)
 
@@ -141,6 +140,13 @@ def __send_venmo_request__(line, total):
 
 if __name__ == "__main__":
 
+    logging.basicConfig(
+        filename="tmobile.log",
+        level=logger.info,
+        format='%(asctime)s %(message)s',
+        datefmt='%m-%d-%Y %I:%M:%S %p'
+    )
+    logger = logging.getLogger(__name__)
     args = __get_args__()
     base_name, ext = os.path.splitext(os.path.basename(args["path"]))
     raw = parser.from_file(args["path"])
@@ -165,42 +171,26 @@ if __name__ == "__main__":
         data_for_account, sub_total = __get_total_charges_and_tabular_data__(
             account_details=_acc_
         )
-        print(data_for_account)
+        logger.info(data_for_account)
         GRAND_TOTAL += sub_total
         if args["test"]:
             continue
         if args["email"]:
-            print("Sending Email ...")
+            logger.info("Sending Email ...")
             try:
                 __send_email__(account_details=_acc_, account_data=data_for_account)
             except EmailFailure as err:
-                print(err)
-                print(
-                    "Email to user={} for line={}\t\t\t\tFAILED".format(
-                        user_name, _acc_.line
-                    )
-                )
+                logger.exception(err)
+                logger.error("Email to user=%s for line=%s : FAILED" % (user_name, _acc_.line))
             else:
-                print(
-                    "Email to user={} for line={}\t\t\t\tSUCCESS".format(
-                        user_name, _acc_.line
-                    )
-                )
+                logger.info("Email to user=%s for line=%s : SUCCESS" % (user_name, _acc_.line))
         if args["venmo"] and args["user"].lower() != user_name.lower():
-            print("Sending Venmo request ...")
+            logger.info("Sending Venmo request ...")
             try:
                 __send_venmo_request__(line=_acc_.line, total=sub_total)
             except UserNotFound as err:
-                print(err)
-                print(
-                    "Request to user={} for line={}\t\t\t\tFAILED".format(
-                        user_name, _acc_.line
-                    )
-                )
+                logger.info(err)
+                logger.info("Request to user=%s for line=%s : FAILED" % (user_name, _acc_.line))
             else:
-                print(
-                    "Request to user={} for line={}\t\t\t\tSUCCESS".format(
-                        user_name, _acc_.line
-                    )
-                )
-    print("TOTAL AMOUNT: {}".format(GRAND_TOTAL))
+                logger.info("Request to user=%s for line=%s : SUCCESS" % (user_name, _acc_.line))
+    logger.info("TOTAL AMOUNT: %s" % GRAND_TOTAL)

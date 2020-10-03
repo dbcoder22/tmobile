@@ -91,5 +91,5 @@ class EmailClient:
             self.service.users().messages().send(userId=user_id, body=message).execute()
         )
         return message.get(
-            "id", EmailFailure("Failed to send email to address={}".format(user_id))
+            "id", EmailFailure("Failed to send email to address=%s" % user_id)
         )

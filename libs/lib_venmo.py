@@ -3,9 +3,11 @@
 Module pertaining to Venmo account and other functionalities
 """
 import os
+import logging
 from venmo_api import Client
 from tmobile.utilities.utils import parse_json_data, UserNotFound
 
+logger = logging.getLogger(__name__)
 
 class Venmo:
     """
@@ -54,6 +56,6 @@ class Venmo:
         """
         total_amount = amount + addtional_amount
         if total_amount < 0:
-            print("Total amount < 0, request not sent")
+            logger.info("Total amount < 0, request not sent")
         else:
             self.client.payment.request_money(total_amount, note, user_id)

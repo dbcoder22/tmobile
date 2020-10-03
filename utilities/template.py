@@ -4,6 +4,9 @@ This module provides all unique dependent functions binded by the
 sole purpose of helping business logic in main. All functions are
 pre-defined string templates
 """
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_email_template(user, month, next_month, year):
@@ -35,13 +38,12 @@ def get_help(input_file):
     :param input_file: Path to the input file that stores input variables
     :type input_file: (str)
     """
-    print(
-        '\nIncorrect inputs provided. Please configure file={} as an example below:\
+    logger.info(
+        '\nIncorrect inputs provided. Please configure file=%s as an example below:\
          \n\t-"path": (Full path) Path to summary bill .pdf file\
          \n\t-"email": (True | False) Toggle for sending email to users\
          \n\t-"sender": Email of the sender\
          \n\t-"venmo": (True | False) for to generate venmo requests(venmo.json required)\
-         \n\t-"user": User from (configs/users.json) who the venmo requests will be sent'.format(
-            input_file
-        )
+         \n\t-"user": User from (configs/users.json) who the venmo requests will be sent' %
+         input_file
     )
