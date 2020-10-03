@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
     logging.basicConfig(
         filename="tmobile.log",
-        level=logger.info,
+        level=logging.INFO,
         format='%(asctime)s %(message)s',
         datefmt='%m-%d-%Y %I:%M:%S %p'
     )
