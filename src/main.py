@@ -140,7 +140,7 @@ def __send_venmo_request__(line, total):
 
 
 if __name__ == "__main__":
-
+    sys.tracebacklimit = 0
     logging.basicConfig(
         filename="tmobile.log",
         level=logging.INFO,
@@ -167,6 +167,7 @@ if __name__ == "__main__":
     SUBJECT = "T-Mobile({} {})".format(months["next_month"], curr_year)
     GRAND_TOTAL = 0
     table_data = []
+    logger.info(SUBJECT)
     for _acc_ in lines:
         user_name = _acc_.user["name"]
         data_for_account, sub_total = __get_total_charges_and_tabular_data__(
