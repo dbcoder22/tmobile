@@ -23,7 +23,7 @@ class TMobile:
         :return: Required data from the file
         :rtype: (str)
         """
-        return self.raw_data[self.positions["start"] + 1: self.positions["end"]]
+        return self.raw_data[self.positions["start"] + 1 : self.positions["end"]]
 
     def _get_start_end_positions(self):
         """Function to parse the bill and get start & end

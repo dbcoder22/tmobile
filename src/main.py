@@ -28,7 +28,7 @@ from tmobile.utilities.utils import (
     parse_months,
     validate_email,
     UserNotFound,
-    get_year
+    get_year,
 )
 from tmobile.libs.lib_email import EmailClient, create_message, EmailFailure
 from tmobile.libs.lib_tmobile import TMobile
