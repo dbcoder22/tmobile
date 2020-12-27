@@ -6,7 +6,13 @@ For each function in utitlies library we have a test with all possible input/out
 from datetime import datetime
 import pytest
 from tmobile.utilities.template import get_email_template
-from tmobile.utilities.utils import parse_months, parse_to_float, parse_to_num
+from tmobile.utilities.utils import (
+    parse_months,
+    parse_to_float,
+    parse_to_num,
+    clean_chunk,
+    get_year,
+)
 
 
 @pytest.mark.parametrize(
@@ -75,3 +81,31 @@ def test_parse_months(input_string, expected_val):
     parsed_months = parse_months(input_string)
     for key in ["current_month", "next_month"]:
         assert parsed_months[key] == expected_val[key]
+
+
+@pytest.mark.parametrize(
+    ("data_chunk", "expected_datachunk"),
+    [
+        ("(123) 1234-342 Voice", "(123) 1234-342 Voice"),
+        ("(123) 1234-342 - New Voice", "(123) 1234-342 Voice"),
+    ],
+)
+def test_clean_chunk(data_chunk, expected_datachunk):
+    """
+    Test clean_chink function
+    """
+    assert clean_chunk(data_chunk) == expected_datachunk
+
+
+@pytest.mark.parametrize(
+    ("months", "expected_year"),
+    [
+        ({"current_month": "Apr", "next_month": "May"}, datetime.today().year),
+        ({"current_month": "Dec", "next_month": "Jan"}, datetime.today().year + 1),
+    ],
+)
+def test_get_year(months, expected_year):
+    """
+    Test get_year function
+    """
+    assert get_year(months=months) == expected_year

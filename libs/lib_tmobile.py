@@ -2,7 +2,7 @@
 """
 Module pertaining to T-Mobile account details that are parsed from PDF provided by the user
 """
-from tmobile.utilities.utils import parse_to_num
+from tmobile.utilities.utils import parse_to_num, clean_chunk
 
 
 class TMobile:
@@ -23,7 +23,7 @@ class TMobile:
         :return: Required data from the file
         :rtype: (str)
         """
-        return self.raw_data[self.positions["start"] + 1 : self.positions["end"]]
+        return self.raw_data[self.positions["start"] + 1: self.positions["end"]]
 
     def _get_start_end_positions(self):
         """Function to parse the bill and get start & end
@@ -78,6 +78,7 @@ class TMobile:
         real_data = self._data[5:]
         for chunk in real_data:
             if len(chunk) > 0:
+                chunk = clean_chunk(data_chunk=chunk)
                 data_ = chunk.split(" ")
                 data_obj = {}
                 for data_value, data_key in zip(data_, self.titles):
