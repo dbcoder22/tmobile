@@ -14,7 +14,6 @@ Configuration needed:
     - venmo.json: Json file containing venmo related details for all users
     - SummaryBillMMMYYYY.pdf : File obtained from family head's T-Mobile account each month
 """
-from datetime import datetime
 import json
 import logging
 import os
@@ -29,6 +28,7 @@ from tmobile.utilities.utils import (
     parse_months,
     validate_email,
     UserNotFound,
+    get_year,
 )
 from tmobile.libs.lib_email import EmailClient, create_message, EmailFailure
 from tmobile.libs.lib_tmobile import TMobile
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     basic_on_each_line = account.get_basic_charge()
 
     months = parse_months(file_name=base_name)
-    curr_year = datetime.today().year
+    curr_year = get_year(months=months)
     SUBJECT = "T-Mobile({} {})".format(months["next_month"], curr_year)
     GRAND_TOTAL = 0
     table_data = []

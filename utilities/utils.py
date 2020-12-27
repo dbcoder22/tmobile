@@ -88,3 +88,32 @@ def parse_json_data(file_path):
     with open(file_path) as file_name:
         data = json.load(file_name)
     return data
+
+
+def clean_chunk(data_chunk):
+    """Function to clear addtional variables from data chunk
+
+    :param data_chunk: Data chunk before identifying all charges
+    :type data_chunk: (str)
+    :return: filtered data chunk
+    :rtype: (str)
+    """
+    filters = [" - New"]
+    for filter_ in filters:
+        data_chunk = data_chunk.replace(filter_, "")
+    return data_chunk
+
+
+def get_year(months):
+    """Function to get exact year based on current and next month
+
+    :param months: Dict containing current and next month
+    :type months: (dict)
+    :return: Year calculated based on current and next month
+    :rtype: (int)
+    """
+    if months["next_month"] == "Jan":
+        year_ = datetime.today().year + 1
+    else:
+        year_ = datetime.today().year
+    return year_

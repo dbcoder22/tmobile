@@ -56,7 +56,7 @@ class Venmo:
         :type addtional_amount:(int), optional
         """
         total_amount = amount + addtional_amount
-        if total_amount < 0:
+        if total_amount <= 0:
             logger.info("Total amount < 0, request not sent")
         else:
             self.client.payment.request_money(total_amount, note, user_id)
