@@ -82,6 +82,6 @@ class TMobile:
                 data_ = chunk.split(" ")
                 data_obj = {}
                 for data_value, data_key in zip(data_, self.titles):
-                    data_obj[data_key] = data_value.replace(u"\xa0", u"")
+                    data_obj[data_key] = data_value
                 account_to_data.append(data_obj)
         return account_to_data

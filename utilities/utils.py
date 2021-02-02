@@ -98,7 +98,7 @@ def clean_chunk(data_chunk):
     :return: filtered data chunk
     :rtype: (str)
     """
-    filters = [" - New"]
+    filters = [" - New", u"\xa0", " - Transferred to T-Mobile", " - Old number"]
     for filter_ in filters:
         data_chunk = data_chunk.replace(filter_, "")
     return data_chunk
