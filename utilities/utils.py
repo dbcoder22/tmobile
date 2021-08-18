@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 This module provides all unique independent utility functions that can be
 imported into other programs to perform string operations as defined

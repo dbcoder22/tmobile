@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 Contains the workflow of T-Mobile application with following roles:
     - Read pdf

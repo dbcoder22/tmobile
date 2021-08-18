@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 This is pytest file to perform unit tests associated with models library.
 For each function in models library we have a test with all possible input/output combinations

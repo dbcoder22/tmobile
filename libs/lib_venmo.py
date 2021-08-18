@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 Module pertaining to Venmo account and other functionalities
 """
@@ -35,7 +35,7 @@ class Venmo:
         :return: Details of user fetched form the venmo repository
         :rtype: (NamedTuple)
         """
-        users = self.client.user.search_for_users(query=user_name, page=1)
+        users = self.client.user.search_for_users(query=user_name)
         if len(users) < 1:
             err = "User={} does not exits, please check venmo user name in venmo.json file".format(
                 user_name

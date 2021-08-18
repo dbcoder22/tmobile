@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 This module provides all unique dependent functions binded by the
 sole purpose of helping business logic in main. All functions are

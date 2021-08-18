@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 Module pertaining to T-Mobile account details that are parsed from PDF provided by the user
 """
