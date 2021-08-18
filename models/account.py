@@ -3,10 +3,7 @@
 Module that represents the T-Mobile account with operations pertaining to whole account
     - Relies on SummaryBillMMMYYYY.pdf to perform operations pertaining to the account
 """
-import sys
-
-sys.path.append("../")
-from utilities.utils import parse_to_float
+from tmobile.utilities.utils import parse_to_float
 
 
 class Account:
