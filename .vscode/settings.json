@@ -5,8 +5,14 @@
         "./libs",
         "./configs",
     ],
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "python.analysis.extraPaths": [
+        "./utilities",
+        "./models",
+        "./libs",
+        "./configs"
+    ]
 }

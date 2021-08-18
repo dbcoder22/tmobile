@@ -1,9 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 """
 Module that represents the T-Mobile account with operations pertaining to whole account
     - Relies on SummaryBillMMMYYYY.pdf to perform operations pertaining to the account
 """
-
 from tmobile.utilities.utils import parse_to_float
 
 
