@@ -42,7 +42,7 @@ def parse_to_float(val):
 
 def parse_months(file_name):
     """Function to get current and new month by parsing a given file name without extension
-       e.g. parse_months("SummaryBillApr2020") -> {"current_month": "Apr", "next_month": "May"}
+       e.g. parse_months("SummaryBillApr2020") -> {"prev_month": "Mar", current_month": "Apr", "next_month": "May"}
 
     :param file_name: Name of the file to parse
     :type file_name: (str)
@@ -56,8 +56,17 @@ def parse_months(file_name):
         new_month = 1
     else:
         new_month = month_num + 1
+    if month_num == 1:
+        prev_month = 12
+    else:
+        prev_month = month_num - 1
     new_month_abbr = calendar.month_abbr[new_month]
-    return {"current_month": month_abbr, "next_month": new_month_abbr}
+    prev_month_abbr = calendar.month_abbr[prev_month]
+    return {
+        "prev_month": prev_month_abbr,
+        "current_month": month_abbr,
+        "next_month": new_month_abbr,
+    }
 
 
 def validate_email(email_address):
@@ -98,7 +107,7 @@ def clean_chunk(data_chunk):
     :return: filtered data chunk
     :rtype: (str)
     """
-    filters = [" - New", u"\xa0", " - Transferred to T-Mobile", " - Old number"]
+    filters = [" - New", "\xa0", " - Transferred to T-Mobile", " - Old number"]
     for filter_ in filters:
         data_chunk = data_chunk.replace(filter_, "")
     return data_chunk

@@ -9,12 +9,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def get_email_template(user, month, next_month, year):
+def get_email_template(user, prev_month, month, next_month, year):
     """Function to generate email template that would include
        the given user, month, next month and year
 
     :param user: Name of the user whom email is addressed
     :type user: (str)
+    :param prev_month: Abbr of prev month
+    :type prev_month: (str)
     :param month: Abbr of current month
     :type month: (str)
     :param next_month: Abbr of next month
@@ -26,10 +28,12 @@ def get_email_template(user, month, next_month, year):
     """
     boiler_plate = "**********   THIS IS AN AUTO-GENERATED EMAIL **********\n\
        \nHello {user},\n\
-       \nFollowing is the bill details for month of {month} {year} (This covers billing cycle from {month} 19 - {next_month} 18)\n\
+       \nFollowing is the bill details for month of {month} {year} (This covers billing cycle from {prev_month} 19 - {month} 18)\n\
        \nAuto-pay is enabled. If you need any copy of the bill for reimbursement please make sure you get it before {next_month} 11th\n\
-       \nYou may have recieved an auto-generated Venmo request for the month of {next_month}\n"
-    return boiler_plate.format(user=user, month=month, year=year, next_month=next_month)
+       \nYou may have recieved an auto-generated Venmo request for the month of {month}\n"
+    return boiler_plate.format(
+        user=user, prev_month=prev_month, month=month, year=year, next_month=next_month
+    )
 
 
 def get_help(input_file):
