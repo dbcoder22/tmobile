@@ -113,6 +113,7 @@ def __send_email__(account_details, account_data):
 
     email_template = get_email_template(
         user=account_details.user["name"],
+        prev_month=months["prev_month"],
         month=months["current_month"],
         next_month=months["next_month"],
         year=curr_year,
@@ -164,7 +165,7 @@ if __name__ == "__main__":
 
     months = parse_months(file_name=base_name)
     curr_year = get_year(months=months)
-    SUBJECT = "T-Mobile({} {})".format(months["next_month"], curr_year)
+    SUBJECT = "T-Mobile({} {})".format(months["current_month"], curr_year)
     GRAND_TOTAL = 0
     table_data = []
     logger.info(SUBJECT)

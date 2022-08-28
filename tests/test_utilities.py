@@ -69,8 +69,18 @@ def test_parse_to_float(input_value, expected_val):
 @pytest.mark.parametrize(
     ("input_string", "expected_val"),
     [
-        ("SummaryBillApr", {"current_month": "Apr", "next_month": "May"}),
-        ("SummaryBillDec", {"current_month": "Dec", "next_month": "Jan"}),
+        (
+            "SummaryBillApr",
+            {"prev_month": "Mar", "current_month": "Apr", "next_month": "May"},
+        ),
+        (
+            "SummaryBillDec",
+            {"prev_month": "Nov", "current_month": "Dec", "next_month": "Jan"},
+        ),
+        (
+            "SummaryBillJan",
+            {"prev_month": "Dec", "current_month": "Jan", "next_month": "Feb"},
+        ),
     ],
 )
 def test_parse_months(input_string, expected_val):
@@ -79,7 +89,7 @@ def test_parse_months(input_string, expected_val):
     """
     input_string += str(datetime.today().year)
     parsed_months = parse_months(input_string)
-    for key in ["current_month", "next_month"]:
+    for key in ["prev_month", "current_month", "next_month"]:
         assert parsed_months[key] == expected_val[key]
 
 
