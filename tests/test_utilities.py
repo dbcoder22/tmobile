@@ -16,22 +16,23 @@ from tmobile.utilities.utils import (
 
 
 @pytest.mark.parametrize(
-    ("user", "month", "new_month", "year"),
+    ("user", "prev_month", "month", "new_month", "year"),
     [
-        ("Rob", "Apr", "May", 2020),
-        ("Mark", "Sep", "Oct", 2021),
-        ("John", "Dec", "Jan", 2019),
+        ("Rob", "Mar", "Apr", "May", 2020),
+        ("Mark", "Aug", "Sep", "Oct", 2021),
+        ("John", "Nov", "Dec", "Jan", 2019),
+        ("Patrick", "Dec", "Jan", "Feb", 2019),
     ],
 )
-def test_get_email_template(user, month, new_month, year):
+def test_get_email_template(user, prev_month, month, new_month, year):
     """
     Test function get_email_template
     """
-    template = get_email_template(user, month, new_month, year)
+    template = get_email_template(user, prev_month, month, new_month, year)
     assert "Hello {}".format(user) in template
     assert "{} {}".format(month, year) in template
-    assert "{} 19".format(month) in template
-    assert "{} 18".format(new_month) in template
+    assert "{} 19".format(prev_month) in template
+    assert "{} 18".format(month) in template
     assert "before {}".format(new_month) in template
 
 
