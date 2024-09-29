@@ -13,6 +13,7 @@ class TMobile:
     def __init__(self, raw_data):
         self.raw_data = raw_data
         self.positions = self._get_start_end_positions()
+        self.plan_total = self._get_plan_total()
         self.account_total = self._get_account_total()
         self.titles = self.get_titles()
 
@@ -23,7 +24,9 @@ class TMobile:
         :return: Required data from the file
         :rtype: (str)
         """
-        return self.raw_data[self.positions["start"] + 1 : self.positions["end"]]
+        start = self.positions["start"] + 1
+        end = self.positions["end"]
+        return self.raw_data[start:end]
 
     def _get_start_end_positions(self):
         """Function to parse the bill and get start & end
@@ -48,13 +51,22 @@ class TMobile:
             )
         return {"start": start_pos, "end": end_pos}
 
+    def _get_plan_total(self):
+        """Private function to get plan total
+
+        :return: Total plan amount on account
+        :rtype: (int)
+        """
+        content = self._data[2].split()
+        return parse_to_num(content[1])
+
     def _get_account_total(self):
         """Private function to get total amount on the account
 
         :return: Total amount on the account
         :rtype: (int)
         """
-        content = self._data[4].split()
+        content = self._data[2].split()
         return parse_to_num(content[-1])
 
     def get_titles(self):

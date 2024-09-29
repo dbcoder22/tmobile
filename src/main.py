@@ -91,7 +91,6 @@ def __get_total_charges_and_tabular_data__(account_details):
         account_details.equipment
         + account_details.services
         + account_details.one_time_charge
-        + tax_on_each_line
         + basic_on_each_line
     )
     chunk = [
@@ -101,8 +100,7 @@ def __get_total_charges_and_tabular_data__(account_details):
         ["Equipment", account_details.equipment],
         ["Services", account_details.services],
         ["One-time", account_details.one_time_charge],
-        ["Basic", basic_on_each_line],
-        ["Tax", tax_on_each_line],
+        ["Basic (incl Tax)", basic_on_each_line],
         ["Total", "${}".format(total_charges)],
     ]
     tabular_data = tabulate(chunk, tablefmt="grid")
@@ -158,9 +156,8 @@ if __name__ == "__main__":
     tmobile = TMobile(raw_data=data)
     account_to_data = tmobile.get_account_data_mapping()
     lines = [Line(account) for account in account_to_data]
-    account = Account(all_lines=lines, account_total=tmobile.account_total)
+    account = Account(all_lines=lines, account_total=tmobile.plan_total)
 
-    tax_on_each_line = account.get_tax_charge()
     basic_on_each_line = account.get_basic_charge()
 
     months = parse_months(file_name=base_name)

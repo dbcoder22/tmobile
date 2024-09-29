@@ -18,7 +18,7 @@ class UserNotFound(Exception):
 
 def parse_to_num(string_val):
     """Convert given value to a numeric value
-       e.g. parse_to_float(25.9345) -> 25.94
+       e.g. parse_to_num($25.9345) -> 25.94
 
     :param string_val: Value to be converted to numerical value
     :type string_val: (str)
