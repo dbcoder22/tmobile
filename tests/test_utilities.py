@@ -16,22 +16,23 @@ from tmobile.utilities.utils import (
 
 
 @pytest.mark.parametrize(
-    ("user", "month", "new_month", "year"),
+    ("user", "prev_month", "month", "new_month", "year"),
     [
-        ("Rob", "Apr", "May", 2020),
-        ("Mark", "Sep", "Oct", 2021),
-        ("John", "Dec", "Jan", 2019),
+        ("Rob", "Mar", "Apr", "May", 2020),
+        ("Mark", "Aug", "Sep", "Oct", 2021),
+        ("John", "Nov", "Dec", "Jan", 2019),
+        ("Patrick", "Dec", "Jan", "Feb", 2019),
     ],
 )
-def test_get_email_template(user, month, new_month, year):
+def test_get_email_template(user, prev_month, month, new_month, year):
     """
     Test function get_email_template
     """
-    template = get_email_template(user, month, new_month, year)
+    template = get_email_template(user, prev_month, month, new_month, year)
     assert "Hello {}".format(user) in template
     assert "{} {}".format(month, year) in template
-    assert "{} 19".format(month) in template
-    assert "{} 18".format(new_month) in template
+    assert "{} 19".format(prev_month) in template
+    assert "{} 18".format(month) in template
     assert "before {}".format(new_month) in template
 
 
@@ -69,8 +70,18 @@ def test_parse_to_float(input_value, expected_val):
 @pytest.mark.parametrize(
     ("input_string", "expected_val"),
     [
-        ("SummaryBillApr", {"current_month": "Apr", "next_month": "May"}),
-        ("SummaryBillDec", {"current_month": "Dec", "next_month": "Jan"}),
+        (
+            "SummaryBillApr",
+            {"prev_month": "Mar", "current_month": "Apr", "next_month": "May"},
+        ),
+        (
+            "SummaryBillDec",
+            {"prev_month": "Nov", "current_month": "Dec", "next_month": "Jan"},
+        ),
+        (
+            "SummaryBillJan",
+            {"prev_month": "Dec", "current_month": "Jan", "next_month": "Feb"},
+        ),
     ],
 )
 def test_parse_months(input_string, expected_val):
@@ -79,7 +90,7 @@ def test_parse_months(input_string, expected_val):
     """
     input_string += str(datetime.today().year)
     parsed_months = parse_months(input_string)
-    for key in ["current_month", "next_month"]:
+    for key in ["prev_month", "current_month", "next_month"]:
         assert parsed_months[key] == expected_val[key]
 
 

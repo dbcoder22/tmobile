@@ -79,6 +79,8 @@ class TMobile:
         for chunk in real_data:
             if len(chunk) > 0:
                 chunk = clean_chunk(data_chunk=chunk)
+                if "Removed" in chunk:
+                    continue
                 data_ = chunk.split(" ")
                 data_obj = {}
                 for data_value, data_key in zip(data_, self.titles):
