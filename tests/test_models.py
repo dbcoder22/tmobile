@@ -122,6 +122,5 @@ def test_all_account():
     ]
     account_ = Account(all_lines=lines_, account_total=50)
     assert account_.get_basic_charge() == 25
-    assert account_.get_tax_charge() == 4.43
     assert account_.no_of_lines == 2
     assert account_.tax_total == 8.86

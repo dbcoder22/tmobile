@@ -43,11 +43,3 @@ class Account:
         :rtype: (float)
         """
         return parse_to_float(self.account_total / self.no_of_lines)
-
-    def get_tax_charge(self):
-        """Function to get tax charges for each line on the account
-
-        :return: Tax chagge for each line
-        :rtype: (float)
-        """
-        return parse_to_float(self.tax_total / self.no_of_lines)
