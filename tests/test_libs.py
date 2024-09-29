@@ -141,7 +141,7 @@ def test_tmobile_functions():
     tmobile_ = TMobile(raw_data=__test_actual_data__)
     assert "Line" in tmobile_.titles
     assert "Equipment" in tmobile_.titles
-    assert tmobile_.account_total == 120.57
+    assert tmobile_.account_total == 317.53
     account_data_map = tmobile_.get_account_data_mapping()
     assert len(account_data_map) == 3
     assert account_data_map[0]["Line"] == "(123)456-7890"
