@@ -98,7 +98,7 @@ def test_parse_months(input_string, expected_val):
     ("data_chunk", "expected_datachunk"),
     [
         ("(123) 1234-342 Voice", "(123) 1234-342 Voice"),
-        ("(123) 1234-342 - New Voice", "(123) 1234-342 Voice"),
+        ("(123) 1234-342 - New Number Voice", "(123) 1234-342 Voice"),
     ],
 )
 def test_clean_chunk(data_chunk, expected_datachunk):
